@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
+exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
 // create mock movie data in memory 
 let movies = [
     { id: 1, title: 'The Shining', year: 1980 },
@@ -26,7 +26,7 @@ exports.createMovie = createMovie;
 // PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
 const updateMovie = (req, res) => {
     // find movie in array by id
-    const index = movies.findIndex(m => m.id. == req.params.id);
+    const index = movies.findIndex(m => m.id.toString() === req.params.id.toString());
     if (index === -1) {
         return res.status(404).json({ 'error': 'Not Found' });
     }
@@ -36,3 +36,15 @@ const updateMovie = (req, res) => {
     return res.status(204).json(); // 204: OK, No Content
 };
 exports.updateMovie = updateMovie;
+// DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
+const deleteMovie = (req, res) => {
+    // find movie in array by id
+    const index = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+    if (index === -1) {
+        return res.status(404).json({ 'error': 'Not Found' });
+    }
+    // movie found, so remove from array
+    movies.splice(index, 1);
+    return res.status(204).json(); // 204: OK, No Content
+};
+exports.deleteMovie = deleteMovie;

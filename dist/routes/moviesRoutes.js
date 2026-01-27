@@ -13,5 +13,7 @@ router.get('/', moviesController_1.getMovies);
 router.post('/', moviesController_1.createMovie);
 // PUT: /api/v1/movies/3489 => : represents a url param (usually an id val)
 router.put('/:id', moviesController_1.updateMovie);
+// DELETE: /api/v1/movies/3489 => : represents a url param (usually an id val)
+router.delete('/:id', moviesController_1.deleteMovie);
 // make router public
 exports.default = router;

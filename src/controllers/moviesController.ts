@@ -46,3 +46,17 @@ export const updateMovie = (req: Request, res: Response) => {
     movies[index].year = req.body.year;
     return res.status(204).json(); // 204: OK, No Content
 };
+
+// DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
+export const deleteMovie = (req: Request, res: Response) => {
+    // find movie in array by id
+    const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+
+    if (index === -1) {
+        return res.status(404).json({ 'error': 'Not Found' });
+    }
+
+    // movie found, so remove from array
+    movies.splice(index, 1);
+    return res.status(204).json(); // 204: OK, No Content
+};
