@@ -9,3 +9,5 @@ Node / Express REST API Backend
 `npm i typescript ts-node express` - use typescript & express
 
 `npm run dev` - start in development mode locally
+
+`npm i body-parser` - so express can read request body on POST / PUT
