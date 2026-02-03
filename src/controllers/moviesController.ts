@@ -1,62 +1,67 @@
 import express, { Request, Response } from 'express';
 
-// define a movie object
-interface Movie {
-    id: number;
-    title: string;
-    year: number;
-}
+// Movie Model ref
+import Movie from '../models/movie';
 
-// create mock movie data in memory 
-let movies: Movie[] = [
-    { id: 1, title: 'The Shining', year: 1980 },
-    { id: 2, title: 'Weapons', year: 2025 },
-    { id: 3, title: '28 Years Later', year: 2025 },
-    { id: 4, title: 'Deadpool & Wolverine', year: 2024 }
-];
+// // define a movie object
+// interface Movie {
+//     id: number;
+//     title: string;
+//     year: number;
+// }
+
+// // create mock movie data in memory 
+// let movies: Movie[] = [
+//     { id: 1, title: 'The Shining', year: 1980 },
+//     { id: 2, title: 'Weapons', year: 2025 },
+//     { id: 3, title: '28 Years Later', year: 2025 },
+//     { id: 4, title: 'Deadpool & Wolverine', year: 2024 }
+// ];
 
 // GET: fetch all movies
-export const getMovies = (req: Request, res: Response) => {
+export const getMovies = async (req: Request, res: Response) => {
+    // use model to fetch all movie documents from MongoDB
+    const movies = await Movie.find();
     return res.status(200).json(movies);
 }
 
 // POST: create new movie from request body
-export const createMovie = (req: Request, res: Response) => {
+export const createMovie = async (req: Request, res: Response) => {
     if (!req.body) {
         return res.status(400).json({ 'error': 'Bad Request' }); // 400: Bad Request
     }
 
-    // add new movie to array from request body
-    movies.push(req.body);
+    // use Movie model to save to db
+    await Movie.create(req.body);
 
     return res.status(201).json(); // 201: Resource Created
 }
 
-// PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
-export const updateMovie = (req: Request, res: Response) => {
-    // find movie in array by id
-    const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+// // PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
+// export const updateMovie = (req: Request, res: Response) => {
+//     // find movie in array by id
+//     const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
 
-    if (index === -1) {
-        return res.status(404).json({ 'error': 'Not Found' });
-    }
+//     if (index === -1) {
+//         return res.status(404).json({ 'error': 'Not Found' });
+//     }
 
-    // update element in array w/vals from request body
-    movies[index].title = req.body.title;
-    movies[index].year = req.body.year;
-    return res.status(204).json(); // 204: OK, No Content
-};
+//     // update element in array w/vals from request body
+//     movies[index].title = req.body.title;
+//     movies[index].year = req.body.year;
+//     return res.status(204).json(); // 204: OK, No Content
+// };
 
-// DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
-export const deleteMovie = (req: Request, res: Response) => {
-    // find movie in array by id
-    const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+// // DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
+// export const deleteMovie = (req: Request, res: Response) => {
+//     // find movie in array by id
+//     const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
 
-    if (index === -1) {
-        return res.status(404).json({ 'error': 'Not Found' });
-    }
+//     if (index === -1) {
+//         return res.status(404).json({ 'error': 'Not Found' });
+//     }
 
-    // movie found, so remove from array
-    movies.splice(index, 1);
-    return res.status(204).json(); // 204: OK, No Content
-};
+//     // movie found, so remove from array
+//     movies.splice(index, 1);
+//     return res.status(204).json(); // 204: OK, No Content
+// };

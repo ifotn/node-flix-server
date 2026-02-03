@@ -2,5 +2,5 @@
     "watch": ["src"],
     "ext": "ts,json",
     "ignore": ["dist", "node_modules"],
-    "exec": "tsc && node dist/app.js"
+    "exec": "tsc && node --env-file=.env dist/app.js"
 }
