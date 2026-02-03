@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-//import { getMovies, createMovie, updateMovie, deleteMovie } from '../controllers/moviesController';
 const moviesController_1 = require("../controllers/moviesController");
 // create router to point each url to controller function it should call
 const router = express_1.default.Router();
@@ -12,9 +11,9 @@ const router = express_1.default.Router();
 router.get('/', moviesController_1.getMovies);
 // POST: /api/v1/movies
 router.post('/', moviesController_1.createMovie);
-// // PUT: /api/v1/movies/3489 => : represents a url param (usually an id val)
-// router.put('/:id', updateMovie);
-// // DELETE: /api/v1/movies/3489 => : represents a url param (usually an id val)
-// router.delete('/:id', deleteMovie);
+// PUT: /api/v1/movies/3489 => : represents a url param (usually an id val)
+router.put('/:id', moviesController_1.updateMovie);
+// DELETE: /api/v1/movies/3489 => : represents a url param (usually an id val)
+router.delete('/:id', moviesController_1.deleteMovie);
 // make router public
 exports.default = router;

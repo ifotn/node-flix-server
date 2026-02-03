@@ -37,31 +37,32 @@ export const createMovie = async (req: Request, res: Response) => {
     return res.status(201).json(); // 201: Resource Created
 }
 
-// // PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
-// export const updateMovie = (req: Request, res: Response) => {
-//     // find movie in array by id
-//     const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+// PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
+export const updateMovie = async (req: Request, res: Response) => {
+    // check if id valid
+    const movie = await Movie.findById(req.params.id);
 
-//     if (index === -1) {
-//         return res.status(404).json({ 'error': 'Not Found' });
-//     }
+    if (!movie) {
+        return res.status(404).json({ 'error': 'Movie Not Found' });
+    }
 
-//     // update element in array w/vals from request body
-//     movies[index].title = req.body.title;
-//     movies[index].year = req.body.year;
-//     return res.status(204).json(); // 204: OK, No Content
-// };
+    // use mongoose to update Movie from request body
+    await Movie.findByIdAndUpdate(req.params.id, req.body);
 
-// // DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
-// export const deleteMovie = (req: Request, res: Response) => {
-//     // find movie in array by id
-//     const index: number = movies.findIndex(m => m.id.toString() === req.params.id.toString());
+    return res.status(204).json(); // 204: OK, No Content
+};
 
-//     if (index === -1) {
-//         return res.status(404).json({ 'error': 'Not Found' });
-//     }
+// DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
+export const deleteMovie = async (req: Request, res: Response) => {
+    // check if id valid
+    const movie = await Movie.findById(req.params.id);
 
-//     // movie found, so remove from array
-//     movies.splice(index, 1);
-//     return res.status(204).json(); // 204: OK, No Content
-// };
+    if (!movie) {
+        return res.status(404).json({ 'error': 'Movie Not Found' });
+    }
+
+    // use mongoose to delete movie based on id param in url
+    await Movie.findByIdAndDelete(req.params.id);
+
+    return res.status(204).json(); // 204: OK, No Content
+};
