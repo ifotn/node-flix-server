@@ -22,6 +22,8 @@ import Movie from '../models/movie';
 * @swagger
 * /api/v1/movies:
 *   get:
+*     tags:
+*     - Movie
 *     summary: Retrieve all movies
 *     responses:
 *       200:
@@ -49,6 +51,8 @@ export const getMovies = async (req: Request, res: Response) => {
 * @swagger
 * /api/v1/movies:
 *   post:
+*     tags:
+*     - Movie
 *     summary: Create a new movie
 *     requestBody:
 *       required: true
@@ -89,6 +93,8 @@ export const createMovie = async (req: Request, res: Response) => {
 * @swagger
 * /api/v1/movies/{id}:
 *   put:
+*     tags:
+*     - Movie
 *     summary: Update a movie based on id param in url
 *     parameters:
 *       - name: id
@@ -133,6 +139,8 @@ export const updateMovie = async (req: Request, res: Response) => {
 * @swagger
 * /api/v1/movies/{id}:
 *   delete:
+*     tags:
+*     - Movie
 *     summary: Delete a movie based on id param in url
 *     parameters:
 *       - name: id
@@ -164,6 +172,8 @@ export const deleteMovie = async (req: Request, res: Response) => {
 * @swagger
 * /api/v1/movies/{id}/reviews:
 *   post:
+*     tags:
+*     - Movie, Review
 *     summary: Add a review child document to a selected movie based on id param in url
 *     parameters:
 *       - name: id

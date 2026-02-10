@@ -23,6 +23,8 @@ const movie_1 = __importDefault(require("../models/movie"));
 * @swagger
 * /api/v1/movies:
 *   get:
+*     tags:
+*     - Movie
 *     summary: Retrieve all movies
 *     responses:
 *       200:
@@ -47,6 +49,8 @@ exports.getMovies = getMovies;
 * @swagger
 * /api/v1/movies:
 *   post:
+*     tags:
+*     - Movie
 *     summary: Create a new movie
 *     requestBody:
 *       required: true
@@ -85,6 +89,8 @@ exports.createMovie = createMovie;
 * @swagger
 * /api/v1/movies/{id}:
 *   put:
+*     tags:
+*     - Movie
 *     summary: Update a movie based on id param in url
 *     parameters:
 *       - name: id
@@ -126,6 +132,8 @@ exports.updateMovie = updateMovie;
 * @swagger
 * /api/v1/movies/{id}:
 *   delete:
+*     tags:
+*     - Movie
 *     summary: Delete a movie based on id param in url
 *     parameters:
 *       - name: id
@@ -154,6 +162,8 @@ exports.deleteMovie = deleteMovie;
 * @swagger
 * /api/v1/movies/{id}/reviews:
 *   post:
+*     tags:
+*     - Movie, Review
 *     summary: Add a review child document to a selected movie based on id param in url
 *     parameters:
 *       - name: id
