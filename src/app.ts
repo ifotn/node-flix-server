@@ -38,8 +38,15 @@ const openApiSpecs = swaggerJsDoc(options);
 app.use('/api-docs', swaggerUi.serve);
 
 // set url routing for swagger api docs
+// use Cloudflare Content Delivery Network for css/js so links work on any server (no local paths)
 app.get('/api-docs', (req: Request, res: Response) => {
-    const html: string = swaggerUi.generateHTML(openApiSpecs);
+    const html: string = swaggerUi.generateHTML(openApiSpecs, {
+        customCssUrl: 'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui.min.css',
+        customJs: [
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-bundle.js',
+            'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.15.5/swagger-ui-standalone-preset.js'
+        ]
+    });
     res.send(html);
 });
 
