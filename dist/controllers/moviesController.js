@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
+exports.createReview = exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
 // Movie Model ref
 const movie_1 = __importDefault(require("../models/movie"));
 // // define a movie object
@@ -145,3 +145,28 @@ const deleteMovie = async (req, res) => {
     return res.status(204).json(); // 204: OK, No Content
 };
 exports.deleteMovie = deleteMovie;
+const createReview = async (req, res) => {
+    // retrieve movie id from url param eg. /movies/{id}/reviews
+    const id = req.params.id.toString();
+    // fetch selected movie
+    const movie = await movie_1.default.findById(id);
+    // verify movie found
+    if (!movie) {
+        return res.status(404).json({ 'error': 'Movie Not Found' });
+    }
+    try {
+        // use push() to add to subdocument array
+        // ... is js "spread operator" that destructures an array into separate properties
+        movie.reviews.push({
+            ...req.body,
+            date: new Date()
+        });
+        await movie.save();
+        // return response No Content response
+        return res.sendStatus(204);
+    }
+    catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
+exports.createReview = createReview;

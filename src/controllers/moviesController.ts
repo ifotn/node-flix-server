@@ -154,3 +154,32 @@ export const deleteMovie = async (req: Request, res: Response) => {
 
     return res.status(204).json(); // 204: OK, No Content
 };
+
+export const createReview = async (req: Request, res: Response) => {
+    // retrieve movie id from url param eg. /movies/{id}/reviews
+    const id: string = req.params.id.toString();
+
+    // fetch selected movie
+    const movie = await Movie.findById(id);
+
+    // verify movie found
+    if (!movie) {
+        return res.status(404).json({ 'error': 'Movie Not Found' });
+    }
+
+    try {
+        // use push() to add to subdocument array
+        // ... is js "spread operator" that destructures an array into separate properties
+        movie.reviews.push({
+            ...req.body,
+            date: new Date()
+        });
+        await movie.save();
+
+        // return response No Content response
+        return res.sendStatus(204); 
+    }
+    catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+};
