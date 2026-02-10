@@ -67,7 +67,36 @@ const createMovie = async (req, res) => {
     return res.status(201).json(); // 201: Resource Created
 };
 exports.createMovie = createMovie;
-// PUT: update movie using id param in url (e.g. /api/v1/movies/3489)
+/**
+* @swagger
+* /api/v1/movies/{id}:
+*   put:
+*     summary: Update a movie based on id param in url
+*     parameters:
+*       - name: id
+*         in: path
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               title:
+*                 required: true
+*                 type: string
+*               year:
+*                 required: true
+*                 type: number
+*     responses:
+*       204:
+*         description: Updated, no content
+*       404:
+*         description: Movie not found
+*/
 const updateMovie = async (req, res) => {
     // check if id valid
     const movie = await movie_1.default.findById(req.params.id);
@@ -79,7 +108,23 @@ const updateMovie = async (req, res) => {
     return res.status(204).json(); // 204: OK, No Content
 };
 exports.updateMovie = updateMovie;
-// DELETE: remove movie from array using id param in url (eg. /api/v1/movies/3489)
+/**
+* @swagger
+* /api/v1/movies/{id}:
+*   delete:
+*     summary: Delete a movie based on id param in url
+*     parameters:
+*       - name: id
+*         in: path
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       204:
+*         description: Deleted, no content
+*       404:
+*         description: Movie not found
+*/
 const deleteMovie = async (req, res) => {
     // check if id valid
     const movie = await movie_1.default.findById(req.params.id);
