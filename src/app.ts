@@ -1,7 +1,9 @@
 // npm imports
-import express, { Application } from 'express';
+import express, { Application, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 // our mvc file imports
 import moviesRouter from './routes/moviesRoutes';
@@ -18,6 +20,28 @@ mongoose.connect(process.env.DB, {})
 .catch((error) => console.log(`Connection Failed: ${error}`));
 
 app.listen(4000, () => { console.log(`Express API running on port 4000`) });
+
+// swagger api doc config
+const options = {
+    definition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'NodeFlix API',
+            version: '1.0.0'
+        }
+    },
+    apis: ['./dist/controllers/*.js']  // location of api methods 
+};
+
+// create new document using options above
+const openApiSpecs = swaggerJsDoc(options);
+app.use('/api-docs', swaggerUi.serve);
+
+// set url routing for swagger api docs
+app.get('/api-docs', (req: Request, res: Response) => {
+    const html: string = swaggerUi.generateHTML(openApiSpecs);
+    res.send(html);
+});
 
 // api routing
 app.use('/api/v1/movies', moviesRouter);

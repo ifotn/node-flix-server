@@ -14,3 +14,8 @@ Node / Express REST API Backend
 
 ## Lesson 5 Notes & NPM Commands
 `npm i mongoose` - for MongoDB connection & CRUD access
+
+## Lesson 6 Notes & NPM Commands
+`npm i swagger-jsdoc swagger-ui-express` - swagger API doc generator
+
+If we add comments to each controller method in YAML format, Swagger will use these to auto-generate a new documentation file in HTML format on restart.  T
