@@ -27,10 +27,19 @@ const movie_1 = __importDefault(require("../models/movie"));
 *     responses:
 *       200:
 *         description: A list of movies
+*       404:
+*         description: No movies found
 */
 const getMovies = async (req, res) => {
-    // use model to fetch all movie documents from MongoDB
-    const movies = await movie_1.default.find();
+    // check url for any filter parameters using req.query property (any keys/values after ?)
+    // example: /movies?genre=Comedy
+    const filter = req.query;
+    // use model to fetch movie documents from MongoDB
+    const movies = await movie_1.default.find(filter);
+    // if no movies found
+    if (movies.length === 0) {
+        return res.status(404).json({ error: 'No Movies Found' });
+    }
     return res.status(200).json(movies);
 };
 exports.getMovies = getMovies;
