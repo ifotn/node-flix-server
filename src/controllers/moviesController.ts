@@ -18,14 +18,45 @@ import Movie from '../models/movie';
 //     { id: 4, title: 'Deadpool & Wolverine', year: 2024 }
 // ];
 
-// GET: fetch all movies
+/**
+* @swagger
+* /api/v1/movies:
+*   get:
+*     summary: Retrieve all movies
+*     responses:
+*       200:
+*         description: A list of movies
+*/
 export const getMovies = async (req: Request, res: Response) => {
     // use model to fetch all movie documents from MongoDB
     const movies = await Movie.find();
     return res.status(200).json(movies);
 }
 
-// POST: create new movie from request body
+/**
+* @swagger
+* /api/v1/movies:
+*   post:
+*     summary: Create a new movie
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               title:
+*                 required: true
+*                 type: string
+*               year:
+*                 required: true
+*                 type: number
+*     responses:
+*       201:
+*         description: Movie created
+*       400:
+*         description: Bad request
+*/
 export const createMovie = async (req: Request, res: Response) => {
     if (!req.body) {
         return res.status(400).json({ 'error': 'Bad Request' }); // 400: Bad Request

@@ -19,14 +19,45 @@ const movie_1 = __importDefault(require("../models/movie"));
 //     { id: 3, title: '28 Years Later', year: 2025 },
 //     { id: 4, title: 'Deadpool & Wolverine', year: 2024 }
 // ];
-// GET: fetch all movies
+/**
+* @swagger
+* /api/v1/movies:
+*   get:
+*     summary: Retrieve all movies
+*     responses:
+*       200:
+*         description: A list of movies
+*/
 const getMovies = async (req, res) => {
     // use model to fetch all movie documents from MongoDB
     const movies = await movie_1.default.find();
     return res.status(200).json(movies);
 };
 exports.getMovies = getMovies;
-// POST: create new movie from request body
+/**
+* @swagger
+* /api/v1/movies:
+*   post:
+*     summary: Create a new movie
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               title:
+*                 required: true
+*                 type: string
+*               year:
+*                 required: true
+*                 type: number
+*     responses:
+*       201:
+*         description: Movie created
+*       400:
+*         description: Bad request
+*/
 const createMovie = async (req, res) => {
     if (!req.body) {
         return res.status(400).json({ 'error': 'Bad Request' }); // 400: Bad Request
