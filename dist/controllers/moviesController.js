@@ -71,9 +71,14 @@ const createMovie = async (req, res) => {
     if (!req.body) {
         return res.status(400).json({ 'error': 'Bad Request' }); // 400: Bad Request
     }
-    // use Movie model to save to db
-    await movie_1.default.create(req.body);
-    return res.status(201).json(); // 201: Resource Created
+    try {
+        // use Movie model to save to db
+        await movie_1.default.create(req.body);
+        return res.status(201).json(); // 201: Resource Created
+    }
+    catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
 };
 exports.createMovie = createMovie;
 /**
@@ -145,6 +150,41 @@ const deleteMovie = async (req, res) => {
     return res.status(204).json(); // 204: OK, No Content
 };
 exports.deleteMovie = deleteMovie;
+/**
+* @swagger
+* /api/v1/movies/{id}/reviews:
+*   post:
+*     summary: Add a review child document to a selected movie based on id param in url
+*     parameters:
+*       - name: id
+*         in: path
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               reviewer:
+*                 required: true
+*                 type: string
+*               reviewText:
+*                 required: true
+*                 type: string
+*               rating:
+*                 required: true
+*                 type: number
+*     responses:
+*       204:
+*         description: Movie updated with new review, no content
+*       400:
+*         description: Bad request - invalid review content
+*       404:
+*         description: Movie not found
+*/
 const createReview = async (req, res) => {
     // retrieve movie id from url param eg. /movies/{id}/reviews
     const id = req.params.id.toString();
