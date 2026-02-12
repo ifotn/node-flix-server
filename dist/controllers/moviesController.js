@@ -123,9 +123,16 @@ const updateMovie = async (req, res) => {
     if (!movie) {
         return res.status(404).json({ 'error': 'Movie Not Found' });
     }
-    // use mongoose to update Movie from request body
-    await movie_1.default.findByIdAndUpdate(req.params.id, req.body);
-    return res.status(204).json(); // 204: OK, No Content
+    try {
+        // use mongoose to update Movie from request body
+        movie.set(req.body);
+        await movie.validate();
+        await movie.save();
+        return res.status(204).json(); // 204: OK, No Content
+    }
+    catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
 };
 exports.updateMovie = updateMovie;
 /**
