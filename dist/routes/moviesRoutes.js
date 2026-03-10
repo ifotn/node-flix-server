@@ -17,5 +17,7 @@ router.put('/:id', moviesController_1.updateMovie);
 router.delete('/:id', moviesController_1.deleteMovie);
 // POST: /api/v1/movies/{id}/reviews
 router.post('/:id/reviews', moviesController_1.createReview);
+// GET: /api/v1/movies/{id} => fetch selected movie by id url param
+router.get('/:id', moviesController_1.getMovie);
 // make router public
 exports.default = router;

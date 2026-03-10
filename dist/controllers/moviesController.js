@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createReview = exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
+exports.getMovie = exports.createReview = exports.deleteMovie = exports.updateMovie = exports.createMovie = exports.getMovies = void 0;
 // Movie Model ref
 const movie_1 = __importDefault(require("../models/movie"));
 // // define a movie object
@@ -126,7 +126,6 @@ const updateMovie = async (req, res) => {
     try {
         // use mongoose to update Movie from request body
         movie.set(req.body);
-        await movie.validate();
         await movie.save();
         return res.status(204).json(); // 204: OK, No Content
     }
@@ -227,3 +226,16 @@ const createReview = async (req, res) => {
     }
 };
 exports.createReview = createReview;
+const getMovie = async (req, res) => {
+    try {
+        const movie = await movie_1.default.findById(req.params.id);
+        if (!movie) {
+            return res.status(404).json({ 'error': 'Movie Not Found' });
+        }
+        return res.status(200).json(movie);
+    }
+    catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+};
+exports.getMovie = getMovie;

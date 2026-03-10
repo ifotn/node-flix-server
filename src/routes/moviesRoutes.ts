@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
 
-import { getMovies, createMovie, updateMovie, deleteMovie, createReview } from '../controllers/moviesController';
+import { getMovies, createMovie, updateMovie, deleteMovie, createReview, getMovie } from '../controllers/moviesController';
 
 // create router to point each url to controller function it should call
 const router: Router = express.Router();
@@ -19,6 +19,9 @@ router.delete('/:id', deleteMovie);
 
 // POST: /api/v1/movies/{id}/reviews
 router.post('/:id/reviews', createReview);
+
+// GET: /api/v1/movies/{id} => fetch selected movie by id url param
+router.get('/:id', getMovie);
 
 // make router public
 export default router;
