@@ -239,6 +239,27 @@ export const createReview = async (req: Request, res: Response) => {
     }
 };
 
+/**
+* @swagger
+* /api/v1/movies/{id}:
+*   get:
+*     tags:
+*     - Movie
+*     summary: Fetches a movie based on id param in url
+*     parameters:
+*       - name: id
+*         in: path
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Movie returned
+*       404:
+*         description: Movie not found
+*       500:
+*         description: Internal server error
+*/
 export const getMovie = async (req: Request, res: Response) => {
     try {
         const movie = await Movie.findById(req.params.id);
