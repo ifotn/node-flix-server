@@ -19,3 +19,10 @@ Node / Express REST API Backend
 `npm i swagger-jsdoc swagger-ui-express` - swagger API doc generator
 
 If we add comments to each controller method in YAML format, Swagger will use these to auto-generate a new documentation file in HTML format on restart.  T
+
+## Lesson 10 Notes & NPM Commands
+
+```bash
+npm i passport passport-local passport-local-mongoose
+npm audit fix
+```

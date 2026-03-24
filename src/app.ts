@@ -4,9 +4,12 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import passport from 'passport';
 
 // our mvc file imports
 import moviesRouter from './routes/moviesRoutes';
+import usersRouter from './routes/usersRoutes';
+import User from './models/user';
 
 // create & run new express app
 const app: Application = express();
@@ -18,6 +21,16 @@ app.use(bodyParser.json());  // parse request body as json
 mongoose.connect(process.env.DB, {})
 .then((response) => console.log('Connected to MongoDB'))
 .catch((error) => console.log(`Connection Failed: ${error}`));
+
+// passport config for auth
+app.use(passport.initialize());
+
+// defaults to local strategy => users in our own db
+passport.use(User.createStrategy());
+
+// session mgmt => read / write user data to / from session
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.listen(4000, () => { console.log(`Express API running on port 4000`) });
 
@@ -52,3 +65,4 @@ app.get('/api-docs', (req: Request, res: Response) => {
 
 // api routing
 app.use('/api/v1/movies', moviesRouter);
+app.use('/api/v1/users', usersRouter);
