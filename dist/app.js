@@ -11,6 +11,7 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = require("passport-jwt");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 // our mvc file imports
 const moviesRoutes_1 = __importDefault(require("./routes/moviesRoutes"));
 const usersRoutes_1 = __importDefault(require("./routes/usersRoutes"));
@@ -19,6 +20,7 @@ const user_1 = __importDefault(require("./models/user"));
 const app = (0, express_1.default)();
 // express app config
 app.use(body_parser_1.default.json()); // parse request body as json
+app.use((0, cookie_parser_1.default)()); // needed to read cookies w/jwt in http requests
 // mongodb connection
 mongoose_1.default.connect(process.env.DB, {})
     .then((response) => console.log('Connected to MongoDB'))

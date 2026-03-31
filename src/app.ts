@@ -6,6 +6,7 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
+import cookieParser from 'cookie-parser';
 
 // our mvc file imports
 import moviesRouter from './routes/moviesRoutes';
@@ -17,6 +18,7 @@ const app: Application = express();
 
 // express app config
 app.use(bodyParser.json());  // parse request body as json
+app.use(cookieParser());  // needed to read cookies w/jwt in http requests
 
 // mongodb connection
 mongoose.connect(process.env.DB, {})

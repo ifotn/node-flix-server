@@ -25,6 +25,10 @@ const setTokenCookie = (res, token) => {
         sameSite: 'None'
     });
 };
+const clearTokenCookie = (res) => {
+    // delete cookie holding current jwt
+    res.clearCookie('authToken');
+};
 const register = async (req, res) => {
     try {
         // duplicate username check
@@ -68,6 +72,8 @@ const login = async (req, res) => {
 };
 exports.login = login;
 const logout = (req, res) => {
+    // remove cookie w/jwt
+    clearTokenCookie(res);
     res.status(200).json({ message: 'User Logged Out' });
 };
 exports.logout = logout;
