@@ -1,5 +1,29 @@
 import express, { Request, Response } from 'express';
 import User from '../models/user';
+import jwt from 'jsonwebtoken';
+
+// jwt functions
+const generateToken = (user: any): string => {
+    // create token contents
+    const jwtPayload = {
+        id: user._id,
+        username: user.username
+    };
+
+    const jwtOptions = { expiresIn: '1hr' };
+
+    // make & return new jwt with user data, encrypted by secret, expiring in 1 hour
+    return jwt.sign(jwtPayload, process.env.PASSPORT_SECRET, jwtOptions);
+};
+
+const setTokenCookie = (res: Response, token: string): void => {
+    // create http only cookie that client script can't read containing jwt
+    res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
+    });
+};
 
 export const register = async (req: Request, res: Response) => {
     try {
@@ -36,7 +60,9 @@ export const login = async (req: Request, res: Response) => {
         const result = await user.authenticate(req.body.password);
         if (!result.user) throw new Error('Invalid Login');
 
-        // user found
+        // user found => create jwt w/user info, put jwt in httpOnly cookie, return ok
+        const authToken: string = generateToken(result.user);
+        setTokenCookie(res, authToken);
         return res.status(200).json({ id: result.user._id, username: result.user.username });
     }
     catch (error) {

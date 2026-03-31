@@ -26,3 +26,10 @@ If we add comments to each controller method in YAML format, Swagger will use th
 npm i passport passport-local passport-local-mongoose
 npm audit fix
 ```
+
+## Lesson 11 Notes & NPM Commands
+
+```bash
+npm i jsonwebtoken passport-jwt cookie-parser
+npm audit fix
+```

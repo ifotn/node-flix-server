@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import passport from 'passport';
+import { Strategy, ExtractJwt } from 'passport-jwt';
 
 // our mvc file imports
 import moviesRouter from './routes/moviesRoutes';
@@ -31,6 +32,30 @@ passport.use(User.createStrategy());
 // session mgmt => read / write user data to / from session
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// jwt config
+const jwtOptions = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.PASSPORT_SECRET
+};
+
+const strategy = new Strategy(jwtOptions, async (jwtPayload, callback) => {
+    try {
+        // decrypt jwt and check contents
+        const user = await User.findByid(jwtPayload.id);
+
+        if (!user) throw new Error('Invalid user id in token');
+
+        // user found, return user info and no error
+        return callback(null, user);
+    }
+    catch (error) {
+        // if error, return error but no user info
+        return callback(error, null);
+    }
+});
+
+passport.use(strategy);
 
 app.listen(4000, () => { console.log(`Express API running on port 4000`) });
 

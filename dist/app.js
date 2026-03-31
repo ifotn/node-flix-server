@@ -10,6 +10,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const passport_1 = __importDefault(require("passport"));
+const passport_jwt_1 = require("passport-jwt");
 // our mvc file imports
 const moviesRoutes_1 = __importDefault(require("./routes/moviesRoutes"));
 const usersRoutes_1 = __importDefault(require("./routes/usersRoutes"));
@@ -29,6 +30,26 @@ passport_1.default.use(user_1.default.createStrategy());
 // session mgmt => read / write user data to / from session
 passport_1.default.serializeUser(user_1.default.serializeUser());
 passport_1.default.deserializeUser(user_1.default.deserializeUser());
+// jwt config
+const jwtOptions = {
+    jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: process.env.PASSPORT_SECRET
+};
+const strategy = new passport_jwt_1.Strategy(jwtOptions, async (jwtPayload, callback) => {
+    try {
+        // decrypt jwt and check contents
+        const user = await user_1.default.findByid(jwtPayload.id);
+        if (!user)
+            throw new Error('Invalid user id in token');
+        // user found, return user info and no error
+        return callback(null, user);
+    }
+    catch (error) {
+        // if error, return error but no user info
+        return callback(error, null);
+    }
+});
+passport_1.default.use(strategy);
 app.listen(4000, () => { console.log(`Express API running on port 4000`); });
 // swagger api doc config
 const options = {

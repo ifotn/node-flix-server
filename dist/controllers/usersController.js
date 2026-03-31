@@ -5,6 +5,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logout = exports.login = exports.register = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// jwt functions
+const generateToken = (user) => {
+    // create token contents
+    const jwtPayload = {
+        id: user._id,
+        username: user.username
+    };
+    const jwtOptions = { expiresIn: '1hr' };
+    // make & return new jwt with user data, encrypted by secret, expiring in 1 hour
+    return jsonwebtoken_1.default.sign(jwtPayload, process.env.PASSPORT_SECRET, jwtOptions);
+};
+const setTokenCookie = (res, token) => {
+    // create http only cookie that client script can't read containing jwt
+    res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None'
+    });
+};
 const register = async (req, res) => {
     try {
         // duplicate username check
@@ -37,7 +57,9 @@ const login = async (req, res) => {
         const result = await user.authenticate(req.body.password);
         if (!result.user)
             throw new Error('Invalid Login');
-        // user found
+        // user found => create jwt w/user info, put jwt in httpOnly cookie, return ok
+        const authToken = generateToken(result.user);
+        setTokenCookie(res, authToken);
         return res.status(200).json({ id: result.user._id, username: result.user.username });
     }
     catch (error) {
